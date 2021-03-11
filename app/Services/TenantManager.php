@@ -19,17 +19,17 @@ class TenantManager {
         return $this->tenant;
     }
     
-    public function loadTenant($identifier) {
-        if ($identifier !== config('app.domain'))
+    public function loadTenant($slug) {
+        if ($slug !== config('app.domain'))
         {
-            if ($identifier)
+            if ($slug)
             {
-                $tenant = Tenant::where('slug', '=', $identifier)->first();
+                $tenant = Tenant::where('slug', '=', $slug)->first();
 
                 if ($tenant == null)
                 {
                     $tenant = new Tenant();
-                    $tenant->slug = $identifier;
+                    $tenant->slug = $slug;
                     // error_log($tenant);
                     $tenant->save();
                 
