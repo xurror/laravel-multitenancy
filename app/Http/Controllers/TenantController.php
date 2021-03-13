@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
+use App\Services\TenantManager;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -18,12 +19,13 @@ class TenantController extends BaseController
      * @param  int  $id
      * @return Response
      */
-    public function show(\App\Services\TenantManager $manager)
+    public function show()
     {
-        $users = \App\User::all();
-        return view('welcome', [
-            'slug' => $manager->getTenant()->slug,
-            'users' => $users
-        ]);
+        $users = User::all();
+        return view('welcome');
+        // return view('welcome', [
+        //     'slug' => $manager->getTenant()->slug,
+        //     'users' => $users
+        // ]);
     }
 }

@@ -20,31 +20,11 @@ class TenancyServiceProvider extends ServiceProvider
 
         $this->app->instance(TenantManager::class, $manager);
 
-        if ($this->app->runningInConsole()) {
-            $subdomain = (new ArgvInput())->getParameterOption('--tenant', null);
+        $request = $this->app->make(Request::class);
+        $subdomain = explode('.', $request->getHost())[0];
+        $manager->loadTenant($subdomain);
 
-            try
-            {
-                if (is_null($subdomain))
-                {
-                    throw new \Exception();
-                }
-                $manager->loadTenant($subdomain);
-            }
-            catch (\Exception $e)
-            {
-                $manager->setTenant(null);
-                error_log($e->getMessage());
-            }
-        }
-        else
-        {
-            $request = $this->app->make(Request::class);
-            $subdomain = explode('.', $request->getHost())[0];
-            $manager->loadTenant($subdomain);
-        }
-        
-        if (!is_null($manager->getTenant())) 
+        if (!is_null($manager->getTenant()))
         {
             config(['database.connections.tenant.database' => 'dr_' . $manager->getTenant()->slug]);
             $this->app['db']->setDefaultConnection('tenant');

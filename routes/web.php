@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\TenantController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,4 +14,4 @@
 |
 */
 
-Route::get('/', 'TenantController@show');
+Route::get('/', [TenantController::class, 'show']);

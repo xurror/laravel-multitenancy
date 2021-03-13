@@ -3,13 +3,14 @@
 namespace App\Jobs;
 
 use App\Services\TenantManager;
-use App\Tenant;
+use App\Models\Tenant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\DB;
 
-class SetupTenantDatabase implements ShouldQueue {
+class SetupTenantDatabaseJob implements ShouldQueue {
 
     use Dispatchable, InteractsWithQueue, Queueable;
 
@@ -23,16 +24,13 @@ class SetupTenantDatabase implements ShouldQueue {
     }
 
     public function handle() {
-        $database    = 'dr_' . $this->tenant->slug;
+        $database = 'dr_' . $this->tenant->slug;
         config(['database.connections.tenant.database' => $database]);
-        
-        $connection  = \DB::connection('mysql');
-        $createMysql = $connection->statement('CREATE DATABASE ' . $database);
 
+        $connection  = DB::connection('main');
+        $is_created = $connection->statement('CREATE DATABASE ' . $database);
 
-        if ($createMysql) {
-            $this->tenantManager->setTenant($this->tenant);
-            $connection->reconnect();
+        if ($is_created) {
             $this->migrate();
         } else {
             $connection->statement('DROP DATABASE ' . $database);
