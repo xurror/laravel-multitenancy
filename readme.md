@@ -7,6 +7,23 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Multi Tenancy in Laravel
+
+This project demos how to create a multi-database multitenant application in laravel.
+
+### Prerquisite
+ - MySQL -v 5.5 and above
+ - PHP -v 8^
+
+### Procedure
+ - First create your main database in mysql, this should match the database specified in your `.env` file.
+ - Run the command `php artisan tenancy:migrate -m` to perform initial migrations for your database.
+ - Start application by running `php artisan serve`
+
+### Usage
+ - Register your new tenant(`tenant1`) in the form on the home page.
+ - Open your tenant site by navigating to `tenant1.localhost:8000` to see your new tenant site and data.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
