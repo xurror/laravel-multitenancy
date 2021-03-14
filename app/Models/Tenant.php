@@ -10,12 +10,19 @@ class Tenant extends Model
     use Notifiable;
 
     /**
+     * The database connection that should be used by the model.
+     *
+     * @var string
+     */
+    protected $connection = 'main';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'slug',
+        'name', 'email', 'slug',
     ];
 
     /**
