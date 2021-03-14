@@ -2,13 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Services\TenantManager;
 use App\Models\Tenant;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\DB;
 
 class SetupTenantDatabaseJob implements ShouldQueue {
 
@@ -16,11 +15,8 @@ class SetupTenantDatabaseJob implements ShouldQueue {
 
     protected $tenant;
 
-    protected $tenantManager;
-
-    public function __construct(Tenant $tenant, TenantManager $tenantManager) {
+    public function __construct(Tenant $tenant) {
         $this->tenant        = $tenant;
-        $this->tenantManager = $tenantManager;
     }
 
     public function handle() {

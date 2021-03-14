@@ -52,6 +52,6 @@ class TenantMigrationCommand extends Command {
             $this->call('migrate:install');
         }
 
-        $this->migrator->run(database_path('migrations/' . $is_main ? 'main' : 'defaults'), []);
+        $this->migrator->run(database_path('migrations/' . ($is_main ? 'main' : 'defaults')), []);
     }
 }
