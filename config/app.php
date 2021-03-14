@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'domain' => env('TENANT_DOMAIN', 'localhost'),
 
     /*
     |--------------------------------------------------------------------------
