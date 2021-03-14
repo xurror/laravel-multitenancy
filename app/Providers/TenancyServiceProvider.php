@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use App\Services\TenantManager;
 use Illuminate\Http\Request;
+use App\Services\SlugService;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\Console\Input\ArgvInput;
 
 class TenancyServiceProvider extends ServiceProvider
 {
@@ -16,17 +15,17 @@ class TenancyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $manager = new TenantManager;
+        $slugService = new SlugService;
 
-        $this->app->instance(TenantManager::class, $manager);
+        $this->app->instance(SlugService::class, $slugService);
 
         $request = $this->app->make(Request::class);
-        $subdomain = explode('.', $request->getHost())[0];
-        $manager->loadTenant($subdomain);
+        $slug = explode('.', $request->getHost())[0];
+        $slug !== config('app.domain') ? $slugService->setSlug($slug) : $slug = null;
 
-        if (!is_null($manager->getTenant()))
+        if (!is_null($slug))
         {
-            config(['database.connections.tenant.database' => 'dr_' . $manager->getTenant()->slug]);
+            config(['database.connections.tenant.database' => 'dr_' . $slug]);
             $this->app['db']->setDefaultConnection('tenant');
         }
     }
@@ -38,11 +37,11 @@ class TenancyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $manager = new TenantManager;
+        $slugService = new SlugService;
 
-        $this->app->instance(TenantManager::class, $manager);
-        $this->app->bind(Tenant::class, function () use ($manager) {
-            return $manager->getTenant();
+        $this->app->instance(TenantManager::class, $slugService);
+        $this->app->bind(Tenant::class, function () use ($slugService) {
+            return $slugService->getSlug();
         });
     }
 }
