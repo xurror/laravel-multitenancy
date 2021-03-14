@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [TenantController::class, 'show']);
+Route::post('/tenants', [TenantController::class, 'create']);
